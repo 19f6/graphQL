@@ -3,35 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
     <link rel="stylesheet" href="styles.css">
-    <title>Interactive Login</title>
 </head>
 <body>
-    <div class="container" id="container">
-        <div class="background-overlay"></div>
-        <div class="reveal-circle" id="revealCircle"></div>
-        <div class="particles" id="particles"></div>
-        <div class="glow-effect"></div>
-        
-        <div class="login-container">
-            <h1 class="login-title">ACCESS</h1>
-            <form id="loginForm">
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder="Username" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-input" placeholder="Password" required>
-                </div>
-                <button type="submit" class="login-button">Enter</button>
-            </form>
-            <div class="forgot-password">
-                <a href="#" id="forgotLink">Forgot Password?</a>
+    <div class="background" id="background"></div>
+
+    <div class="container">
+        <div class="login-box">
+            <div class="login-header">
+                <h2>Log In</h2>
             </div>
+            
+            <form class="login-form" id="loginForm">
+                <div class="input-group">
+                    <label for="email">Email/Username</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>  
+                <button type="submit" class="login-btn">Log In</button>
+            </form>
         </div>
-        
-        <div class="custom-cursor" id="cursor"></div>
     </div>
-<script src="script.js"></script>
-   
+    
+    <script src="script.js"></script>
 </body>
 </html>
