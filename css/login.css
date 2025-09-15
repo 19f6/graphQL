@@ -3,7 +3,9 @@
     padding: 0;
     box-sizing: border-box;
 }
-
+:root{
+      --background: #000000;
+        }
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 100vh;
@@ -17,7 +19,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #252525;
+    background: var(--background);
     z-index: -1;
 }
 
@@ -45,18 +47,15 @@ body {
 }
 
 .login-box {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
+   background: transparent; /* changed from rgba */
+    /* border: 1px solid rgba(255, 255, 255, 0.3); optional subtle border */
+    /* backdrop-filter: blur(10px); keeps blur effect for contrast */
     padding: 40px;
     width: 100%;
     max-width: 400px;
+    border-radius: 20px;
     box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
-    transform: translateY(0);
     transition: all 0.3s ease;
-    position: relative;
-    z-index: 1;
 }
 
 .login-box:hover {
@@ -70,14 +69,14 @@ body {
 }
 
 .login-header h2 {
-    color: #333;
+    color: #8a8a8a;
     font-size: 28px;
     font-weight: 600;
     margin-bottom: 8px;
 }
 
 .login-header p {
-    color: #666;
+    color: #c6c4c4;
     font-size: 14px;
 }
 
@@ -93,7 +92,7 @@ body {
 .input-group label {
     display: block;
     margin-bottom: 8px;
-    color: #333;
+    color: #8a8a8a;
     font-weight: 500;
     font-size: 14px;
 }
@@ -200,4 +199,7 @@ body {
     to {
         opacity: 1;
     }
+}
+#error-message{
+    color: white;
 }
