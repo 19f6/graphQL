@@ -80,7 +80,7 @@ async function loadAuditChart() {
   const radius = 100;
   const center = { x: width / 2, y: height / 2 };
 
-  // Handle case where there's no data
+
   if (total === 0) {
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
     text.setAttribute("x", center.x);
@@ -97,13 +97,13 @@ async function loadAuditChart() {
   let startAngle = 0;
 
   values.forEach((value, i) => {
-    if (value === 0) return; // Skip zero values entirely
+    if (value === 0) return;
 
     const sliceAngle = (value / total) * 2 * Math.PI;
     
-    // Handle full circle case (when only one category has data)
+
     if (sliceAngle >= 2 * Math.PI - 0.001) {
-      // Create a full circle instead of an arc
+
       const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
       circle.setAttribute("cx", center.x);
       circle.setAttribute("cy", center.y);
@@ -111,7 +111,7 @@ async function loadAuditChart() {
       circle.setAttribute("fill", colors[i]);
       svg.appendChild(circle);
       
-      // Add label for full circle
+
       const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
       text.setAttribute("x", center.x);
       text.setAttribute("y", center.y);
@@ -122,7 +122,7 @@ async function loadAuditChart() {
       text.textContent = `${labels[i]} (${value})`;
       svg.appendChild(text);
     } else {
-      // Create arc for partial slices
+
       const endAngle = startAngle + sliceAngle;
 
       const x1 = center.x + radius * Math.cos(startAngle);
@@ -144,7 +144,6 @@ async function loadAuditChart() {
       path.setAttribute("fill", colors[i]);
       svg.appendChild(path);
 
-      // Add label for arc slice
       const midAngle = startAngle + sliceAngle / 2;
       const labelX = center.x + (radius / 1.5) * Math.cos(midAngle);
       const labelY = center.y + (radius / 1.5) * Math.sin(midAngle);

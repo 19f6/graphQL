@@ -1,13 +1,13 @@
 const logoutBtn=document.getElementById("logout")
 function handlelogout(){
 sessionStorage.removeItem("token")
-window.location.href="login.html"
+window.location.href="index.html"
 }
 logoutBtn.addEventListener("click",handlelogout)
 async function fetchGraphQL(query) {
     const token=sessionStorage.getItem("token")
     if(!token){
-        window.location.href="login.html"
+        window.location.href="index.html"
         return
     }
     const response = await fetch (
@@ -48,9 +48,7 @@ async function fetchInfo() {
   } catch (error) {
     document.getElementById("info").textContent =
       "Error fetching profile data: " + error.message;
-    // Optional: force logout if token invalid
     sessionStorage.removeItem("token");
-    // setTimeout(() => window.location.href = "login.html", 1500);
   }
 }
 
