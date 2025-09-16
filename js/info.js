@@ -1,13 +1,13 @@
 const logoutBtn=document.getElementById("logout")
 function handlelogout(){
 sessionStorage.removeItem("token")
-window.location.href="index.html"
+window.location.href="login.html"
 }
 logoutBtn.addEventListener("click",handlelogout)
 async function fetchGraphQL(query) {
     const token=sessionStorage.getItem("token")
     if(!token){
-        window.location.href="index.html"
+        window.location.href="login.html"
         return
     }
     const response = await fetch (
