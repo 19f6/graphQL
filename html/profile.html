@@ -1,10 +1,84 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="../css/profile.css">
+  <title>User Profile</title>
 </head>
 <body>
+  <div class="sidebar">
+    <div id="info" class="user-info"></div>
+
+    <div class="level-card">
+      <h3>User Level</h3>
+      <div class="level-wrapper">
+        <svg width="120" height="120">
+          <circle cx="60" cy="60" r="40" stroke="#ccc" stroke-width="10" fill="none"></circle>
+          <circle class="level-progress" cx="60" cy="60" r="40" stroke="#4caf50" stroke-width="10" fill="none"
+            stroke-dasharray="0" stroke-dashoffset="0" transform="rotate(-90 60 60)"></circle>
+          <text class="level-text" x="60" y="65" text-anchor="middle" font-size="18" font-weight="bold" fill="#fff"></text>
+        </svg>
+      </div>
+    </div>
+
+    <button id="logout">Logout</button>
+  </div>
+
+  <div class="main">
+    <div class="card audit-card">
+      <h3>Audit</h3>
+      <div class="audit-section">
+  
+        <div class="audit-ratio-wrapper">
+          <div class="audit-stats">
+            <div class="audit-stat-item">
+              <span class="stat-label">Audits Done:</span>
+              <span id="audits-done" class="stat-value"></span>
+              <svg width="2000999" height="12" class="bar-chart">
+                <rect id="audits-done-bar" x="0" y="5" width="100" height="10" rx="5" fill="#00cc00"></rect>
+              </svg>
+            </div>
+            <div class="audit-stat-item">
+              <span class="stat-label">Audits Received:</span>
+              <span id="audits-received" class="stat-value"></span>
+              <svg width="200" height="20" class="bar-chart">
+                <rect id="audits-received-bar" x="0" y="5" width="180" height="10" rx="5" fill="#00cc00"></rect>
+              </svg>
+            </div>
+            <div class="audit-ratio-display">
+              <span class="ratio-label">Audit Ratio:</span>
+              <span id="audit-ratio-value" class="ratio-value"></span>
+            </div>
+          </div>
+        </div>
+
     
+        <div class="audit-wrapper">
+          <svg id="auditChart" width="250" height="250"></svg>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card skills-card">
+      <h3>Top Skills</h3>
+      <div id="skills-container">
+        <svg id="skillsRadar" viewBox="0 0 400 400">
+          <g transform="translate(200, 200)">
+            <g class="grid-lines"></g>
+            <g class="skills-plot"></g>
+            <g class="labels"></g>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+<script src="../js/query.js"></script>
+<script src="../js/info.js"></script>
+<script src="../js/level.js"></script>
+<script src="../js/audit.js"></script>
+<script src="../js/skills.js"></script>
 </body>
 </html>
