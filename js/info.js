@@ -9,6 +9,14 @@ if (logoutBtn) {
   logoutBtn.addEventListener("click", handleLogout);
 }
 
+function preventBackNavigation() {
+  history.pushState(null, null, location.href);
+  window.addEventListener('popstate', function(event) {
+    history.pushState(null, null, location.href);
+  });
+}
+
+preventBackNavigation();
 
 const token = sessionStorage.getItem("token");
 if (!token) {
