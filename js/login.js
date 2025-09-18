@@ -34,8 +34,8 @@ async function fetchGraphQL(query) {
 
   const data = await response.json();
 
-  // 🔒 Check if the GraphQL response contains an authentication error
-  if (data.errors && data.errors[0]?.message?.toLowerCase().includes("jwt")) {
+
+  if (data.errors || !data.data) {
     sessionStorage.removeItem("token");
     window.location.href = "index.html";
     return;
@@ -47,13 +47,18 @@ async function fetchGraphQL(query) {
 async function fetchInfo() {
   try {
     const response = await fetchGraphQL(QUERIES.USER_INFO);
-    if (!response) return; // In case redirect already happened
+    if (!response) return;
+    const user = response.data?.user?.[0];
+    if (!user) {
+      sessionStorage.removeItem("token");
+      window.location.href = "index.html";
+      return;
+    }
 
-    const user = response.data.user[0];
     const labelsResponse = await fetchGraphQL(QUERIES.INFO);
     if (!labelsResponse) return;
 
-    const labels = labelsResponse.data.user[0]?.labels || [];
+    const labels = labelsResponse.data?.user?.[0]?.labels || [];
     const cohortNames = labels.map(label => label.labelName).join(", ");
 
     const genderEmoji = user.attrs.genders === "Female" ? "👩🏻" : "🧑🏻";
@@ -67,7 +72,7 @@ async function fetchInfo() {
     `;
   } catch (error) {
     sessionStorage.removeItem("token");
-    window.location.href = "index.html"; // 🔒 fallback redirect
+    window.location.href = "index.html"; 
   }
 }
 
