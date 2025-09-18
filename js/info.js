@@ -80,8 +80,9 @@ if (!sessionStorage.getItem("token")) {
   window.location.replace("index.html");
 } else {
   fetchInfo();
+
   history.pushState(null, "", location.href);
-  window.addEventListener("popstate", () => {
+  window.addEventListener("popstate", function () {
     history.pushState(null, "", location.href);
   });
 }
