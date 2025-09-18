@@ -2,14 +2,14 @@ const logoutBtn = document.getElementById("logout");
 
 function handlelogout() {
   sessionStorage.removeItem("token");
-  window.location.href = "index.html";
+  window.location.replace("index.html");
 }
 logoutBtn.addEventListener("click", handlelogout);
 
 async function fetchGraphQL(query) {
   const token = sessionStorage.getItem("token");
   if (!token) {
-    window.location.href = "index.html";
+    window.location.replace("index.html");
     return;
   }
 
@@ -28,15 +28,16 @@ async function fetchGraphQL(query) {
 
   if (!response.ok) {
     sessionStorage.removeItem("token");
-    window.location.href = "index.html";
+    window.location.replace("index.html");
     throw new Error("Failed to fetch GraphQL data");
   }
 
   const data = await response.json();
 
   if (data.errors || !data.data) {
+    console.error("GraphQL error:", data.errors);
     sessionStorage.removeItem("token");
-    window.location.href = "index.html";
+    window.location.replace("index.html");
     return;
   }
 
@@ -46,12 +47,12 @@ async function fetchGraphQL(query) {
 async function fetchInfo() {
   try {
     const response = await fetchGraphQL(QUERIES.USER_INFO);
-    if (!response) return; 
+    if (!response) return;
 
     const user = response.data?.user?.[0];
     if (!user) {
       sessionStorage.removeItem("token");
-      window.location.href = "index.html";
+      window.location.replace("index.html");
       return;
     }
 
@@ -72,8 +73,12 @@ async function fetchInfo() {
     `;
   } catch (error) {
     sessionStorage.removeItem("token");
-    window.location.href = "index.html";
+    window.location.replace("index.html");
   }
 }
 
-fetchInfo();
+if (!sessionStorage.getItem("token")) {
+  window.location.replace("index.html");
+} else {
+  fetchInfo();
+}
