@@ -10,9 +10,10 @@ if (logoutBtn) {
 }
 
 function preventBackNavigation() {
+  history.pushState(null, null, 'about:blank');
   history.pushState(null, null, location.href);
   window.addEventListener('popstate', function(event) {
-    history.pushState(null, null, location.href);
+    window.location.href = 'about:blank';
   });
 }
 
