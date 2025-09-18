@@ -1,37 +1,64 @@
-const logoutBtn=document.getElementById("logout")
-function handlelogout(){
-sessionStorage.removeItem("token")
-window.location.href="index.html"
+const logoutBtn = document.getElementById("logout");
+
+function handlelogout() {
+  sessionStorage.removeItem("token");
+  window.location.href = "index.html";
 }
-logoutBtn.addEventListener("click",handlelogout)
+logoutBtn.addEventListener("click", handlelogout);
+
 async function fetchGraphQL(query) {
-    const token=sessionStorage.getItem("token")
-    if(!token){
-        window.location.href="index.html"
-        return
-    }
-    const response = await fetch (
-        "https://learn.reboot01.com/api/graphql-engine/v1/graphql",
-        {
-            method: "POST",
-            headers:{
-                Authorization: `Bearer ${token}`,
-               Accept: "application/json",
+  const token = sessionStorage.getItem("token");
+  if (!token) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  const response = await fetch(
+    "https://learn.reboot01.com/api/graphql-engine/v1/graphql",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ query }),
     }
   );
 
-  if (!response.ok) throw new Error("Failed to fetch GraphQL data");
-  return response.json();
+  if (!response.ok) {
+    sessionStorage.removeItem("token");
+    window.location.href = "index.html";
+    throw new Error("Failed to fetch GraphQL data");
+  }
+
+  const data = await response.json();
+
+  if (data.errors || !data.data) {
+    sessionStorage.removeItem("token");
+    window.location.href = "index.html";
+    return;
+  }
+
+  return data;
 }
+
 async function fetchInfo() {
   try {
     const response = await fetchGraphQL(QUERIES.USER_INFO);
-    const user = response.data.user[0];
+    if (!response) return; 
+
+    const user = response.data?.user?.[0];
+    if (!user) {
+      sessionStorage.removeItem("token");
+      window.location.href = "index.html";
+      return;
+    }
+
     const labelsResponse = await fetchGraphQL(QUERIES.INFO);
-    const labels = labelsResponse.data.user[0]?.labels || [];
+    if (!labelsResponse) return;
+
+    const labels = labelsResponse.data?.user?.[0]?.labels || [];
     const cohortNames = labels.map(label => label.labelName).join(", ");
 
     const genderEmoji = user.attrs.genders === "Female" ? "👩🏻" : "🧑🏻";
@@ -43,14 +70,10 @@ async function fetchInfo() {
       <p>ID: ${user.id}</p>
       <p>${cohortNames || "N/A"}</p>
     `;
-
-
   } catch (error) {
-    document.getElementById("info").textContent =
-      "Error fetching profile data: " + error.message;
     sessionStorage.removeItem("token");
+    window.location.href = "index.html";
   }
 }
-
 
 fetchInfo();
