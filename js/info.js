@@ -35,7 +35,6 @@ async function fetchGraphQL(query) {
   const data = await response.json();
 
   if (data.errors || !data.data) {
-    console.error("GraphQL error:", data.errors);
     sessionStorage.removeItem("token");
     window.location.replace("index.html");
     return;
@@ -81,4 +80,8 @@ if (!sessionStorage.getItem("token")) {
   window.location.replace("index.html");
 } else {
   fetchInfo();
+  history.pushState(null, "", location.href);
+  window.addEventListener("popstate", () => {
+    history.pushState(null, "", location.href);
+  });
 }
