@@ -10,7 +10,6 @@ if (logoutBtn) {
 }
 
 
-preventBackNavigation();
 
 const token = sessionStorage.getItem("token");
 if (!token) {
