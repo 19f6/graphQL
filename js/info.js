@@ -9,13 +9,6 @@ if (logoutBtn) {
   logoutBtn.addEventListener("click", handleLogout);
 }
 
-function preventBackNavigation() {
-  history.pushState(null, null, 'about:blank');
-  history.pushState(null, null, location.href);
-  window.addEventListener('popstate', function(event) {
-    window.location.href = 'about:blank';
-  });
-}
 
 preventBackNavigation();
 
