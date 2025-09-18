@@ -1,10 +1,21 @@
 const logoutBtn = document.getElementById("logout");
 
-function handlelogout() {
+function handleLogout() {
   sessionStorage.removeItem("token");
   window.location.replace("index.html");
 }
-logoutBtn.addEventListener("click", handlelogout);
+logoutBtn.addEventListener("click", handleLogout);
+
+if (!sessionStorage.getItem("token")) {
+  window.location.replace("index.html");
+} else {
+  window.location.replace("profile.html");
+  history.pushState(null, "", location.href);
+  window.addEventListener("popstate", function () {
+    history.pushState(null, "", location.href);
+  });
+}
+
 
 async function fetchGraphQL(query) {
   const token = sessionStorage.getItem("token");
@@ -74,15 +85,4 @@ async function fetchInfo() {
     sessionStorage.removeItem("token");
     window.location.replace("index.html");
   }
-}
-
-if (!sessionStorage.getItem("token")) {
-  window.location.replace("index.html");
-} else {
-  fetchInfo();
-
-  history.pushState(null, "", location.href);
-  window.addEventListener("popstate", function () {
-    history.pushState(null, "", location.href);
-  });
 }
