@@ -4,18 +4,16 @@ function handleLogout() {
   sessionStorage.removeItem("token");
   window.location.replace("index.html");
 }
-logoutBtn.addEventListener("click", handleLogout);
 
-if (!sessionStorage.getItem("token")) {
-  window.location.replace("index.html");
-} else {
-  window.location.replace("profile.html");
-  history.pushState(null, "", location.href);
-  window.addEventListener("popstate", function () {
-    history.pushState(null, "", location.href);
-  });
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", handleLogout);
 }
 
+
+const token = sessionStorage.getItem("token");
+if (!token) {
+  window.location.replace("index.html");
+}
 
 async function fetchGraphQL(query) {
   const token = sessionStorage.getItem("token");
@@ -24,34 +22,36 @@ async function fetchGraphQL(query) {
     return;
   }
 
-  const response = await fetch(
-    "https://learn.reboot01.com/api/graphql-engine/v1/graphql",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ query }),
+  try {
+    const response = await fetch(
+      "https://learn.reboot01.com/api/graphql-engine/v1/graphql",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch GraphQL data");
     }
-  );
 
-  if (!response.ok) {
+    const data = await response.json();
+
+    if (data.errors || !data.data) {
+      throw new Error("GraphQL returned errors or no data");
+    }
+
+    return data;
+  } catch (error) {
+    console.error(error);
     sessionStorage.removeItem("token");
     window.location.replace("index.html");
-    throw new Error("Failed to fetch GraphQL data");
   }
-
-  const data = await response.json();
-
-  if (data.errors || !data.data) {
-    sessionStorage.removeItem("token");
-    window.location.replace("index.html");
-    return;
-  }
-
-  return data;
 }
 
 async function fetchInfo() {
@@ -72,17 +72,25 @@ async function fetchInfo() {
     const labels = labelsResponse.data?.user?.[0]?.labels || [];
     const cohortNames = labels.map(label => label.labelName).join(", ");
 
-    const genderEmoji = user.attrs.genders === "Female" ? "👩🏻" : "🧑🏻";
-    document.getElementById("info").innerHTML = `
-      <div style="font-size: 2rem; text-align: center;">${genderEmoji}</div>
-      <h3>${user.attrs.firstName + " " + user.attrs.lastName}</h3>
-      <p>${user.login}</p>
-      <p>Email: ${user.email}</p>
-      <p>ID: ${user.id}</p>
-      <p>${cohortNames || "N/A"}</p>
-    `;
+    const genderEmoji =
+      user.attrs.genders?.toLowerCase() === "female" ? "👩🏻" : "🧑🏻";
+
+    const infoEl = document.getElementById("info");
+    if (infoEl) {
+      infoEl.innerHTML = `
+        <div style="font-size: 2rem; text-align: center;">${genderEmoji}</div>
+        <h3>${user.attrs.firstName} ${user.attrs.lastName}</h3>
+        <p>Username: ${user.login}</p>
+        <p>Email: ${user.email}</p>
+        <p>ID: ${user.id}</p>
+        <p>Cohorts: ${cohortNames || "N/A"}</p>
+      `;
+    }
   } catch (error) {
+    console.error(error);
     sessionStorage.removeItem("token");
     window.location.replace("index.html");
   }
 }
+
+fetchInfo();
