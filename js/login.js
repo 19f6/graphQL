@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", () => {
+  sessionStorage.removeItem("token");
+});
+
 const handleLogin = async () => {
     const username = document.getElementById('username').value
     const password = document.getElementById('password').value
