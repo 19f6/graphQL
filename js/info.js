@@ -1,6 +1,3 @@
-if (window.location.pathname.endsWith("index.html")) {
-  sessionStorage.removeItem("token");
-}
 const logoutBtn = document.getElementById("logout");
 
 function handleLogout() {
