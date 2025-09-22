@@ -33,63 +33,46 @@ function renderSkillsRadar(data) {
   const levels = 5;
   const angleSlice = (Math.PI * 2) / skills.length;
 
-  for (let i = 1; i <= levels; i++) {
-    const r = (radius / levels) * i;
+
+  gridGroup.innerHTML = Array.from({ length: levels }, (_, i) => {
+    const r = (radius / levels) * (i + 1);
     const points = skills.map((_, idx) => {
       const angle = idx * angleSlice - Math.PI / 2;
-      return [r * Math.cos(angle), r * Math.sin(angle)];
+      return `${r * Math.cos(angle)},${r * Math.sin(angle)}`;
     });
+    return `<path d="M${points.join(" L")} Z" stroke="rgba(255,255,255,0.2)" fill="none"></path>`;
+  }).join("");
 
-    const pathData = points.map((p, i) => `${i === 0 ? "M" : "L"}${p[0]},${p[1]}`).join(" ") + "Z";
 
-    const gridPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    gridPath.setAttribute("d", pathData);
-    gridPath.setAttribute("stroke", "rgba(255,255,255,0.2)");
-    gridPath.setAttribute("fill", "none");
-    gridGroup.appendChild(gridPath);
-  }
-
-  // Skill values polygon
   const valuePoints = skills.map((s, idx) => {
     const angle = idx * angleSlice - Math.PI / 2;
     const r = (s.value / 100) * radius;
-    return [r * Math.cos(angle), r * Math.sin(angle)];
+    return `${r * Math.cos(angle)},${r * Math.sin(angle)}`;
   });
 
-  const valuePathData = valuePoints.map((p, i) => `${i === 0 ? "M" : "L"}${p[0]},${p[1]}`).join(" ") + "Z";
+  plotGroup.innerHTML = `
+    <path d="M${valuePoints.join(" L")} Z" 
+          stroke="limegreen" 
+          fill="rgba(0,255,0,0.2)" 
+          stroke-width="2"></path>
+    ${valuePoints.map(p => {
+      const [x, y] = p.split(",");
+      return `<circle cx="${x}" cy="${y}" r="4" fill="black" stroke="white"></circle>`;
+    }).join("")}
+  `;
 
-  const valuePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  valuePath.setAttribute("d", valuePathData);
-  valuePath.setAttribute("stroke", "limegreen");
-  valuePath.setAttribute("fill", "rgba(0,255,0,0.2)");
-  valuePath.setAttribute("stroke-width", "2");
-  plotGroup.appendChild(valuePath);
 
-  // Points + labels
-  valuePoints.forEach((p, idx) => {
-    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle.setAttribute("cx", p[0]);
-    circle.setAttribute("cy", p[1]);
-    circle.setAttribute("r", 4);
-    circle.setAttribute("fill", "black");
-    circle.setAttribute("stroke", "white");
-    plotGroup.appendChild(circle);
-
+  labelsGroup.innerHTML = skills.map((s, idx) => {
     const angle = idx * angleSlice - Math.PI / 2;
     const labelX = (radius + 25) * Math.cos(angle);
     const labelY = (radius + 25) * Math.sin(angle);
-
-    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text.setAttribute("x", labelX);
-    text.setAttribute("y", labelY);
-    text.setAttribute("text-anchor", "middle");
-    text.setAttribute("dominant-baseline", "middle");
-    text.setAttribute("fill", "white");
-    text.style.fontSize = "12px";
-    text.textContent = `${skills[idx].label}\n${skills[idx].value}%`;
-    labelsGroup.appendChild(text);
-  });
+    return `<text x="${labelX}" y="${labelY}" 
+                  text-anchor="middle" 
+                  dominant-baseline="middle" 
+                  fill="white" font-size="12px">
+              ${s.label} ${s.value}%
+            </text>`;
+  }).join("");
 }
 
-// Run when DOM is ready
 document.addEventListener("DOMContentLoaded", loadSkills);
