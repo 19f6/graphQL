@@ -73,7 +73,10 @@ async function loadAuditChart() {
   const colors = ["#e74c3c", "#09600c"];
   const labels = ["Failed", "Valid"];
 
-  <svg id="auditChart" viewBox="0 0 220 220" preserveAspectRatio="xMidYMid meet"></svg>
+const svg = document.getElementById("auditChart");
+  svg.innerHTML = "";
+  svg.setAttribute("viewBox", "0 0 220 220");
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
   if (total === 0) {
     svg.innerHTML = `
