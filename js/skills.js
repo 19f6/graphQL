@@ -21,6 +21,8 @@ function renderSkillsRadar(data) {
   ];
 
   const svg = document.querySelector("#skillsRadar");
+  svg.setAttribute("viewBox", "-200 -200 400 400");
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
   const plotGroup = svg.querySelector(".skills-plot");
   const labelsGroup = svg.querySelector(".labels");
   const gridGroup = svg.querySelector(".grid-lines");
@@ -56,9 +58,9 @@ function renderSkillsRadar(data) {
           fill="rgba(0,255,0,0.2)" 
           stroke-width="2"></path>
     ${valuePoints.map(p => {
-      const [x, y] = p.split(",");
-      return `<circle cx="${x}" cy="${y}" r="4" fill="black" stroke="white"></circle>`;
-    }).join("")}
+    const [x, y] = p.split(",");
+    return `<circle cx="${x}" cy="${y}" r="4" fill="black" stroke="white"></circle>`;
+  }).join("")}
   `;
 
 
