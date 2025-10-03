@@ -66,7 +66,6 @@ body {
   overflow-y: auto;
 }
 
-/* Card */
 .card {
   background: #111;
   border-radius: 12px;
@@ -117,11 +116,6 @@ body {
 .audit-ratio-wrapper {
   flex: 1;
 }
-.level-svg {
-  width: 100%;
-  max-width: 120px;
-  height: auto;
-}
 
 .audit-stats {
   margin-top: 20%;
@@ -148,6 +142,7 @@ body {
   width: 150px;
   height: 16px;
 }
+
 
 @media (max-width: 480px) {
   .bar-chart {
@@ -191,6 +186,7 @@ body {
   height: auto;
 }
 
+
 .skills-card {
   display: flex;
   flex-direction: column;
@@ -212,15 +208,17 @@ body {
   height: auto;
 }
 
+
 @media (max-width: 900px) {
   .main {
     grid-template-columns: 1fr;
   }
 
   .audit-section {
-    flex-direction: column; 
+    flex-direction: column;
   }
 }
+
 
 @media (max-width: 768px) {
   .sidebar {
@@ -233,9 +231,10 @@ body {
   }
 }
 
+
 @media (max-width: 480px) {
   body {
-    flex-direction: column; 
+    flex-direction: column;
     height: auto;
     overflow-y: auto;
   }
