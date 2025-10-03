@@ -41,17 +41,17 @@ function displayAuditRatio(userData) {
 
   const doneBar = document.getElementById("audits-done-bar");
   const receivedBar = document.getElementById("audits-received-bar");
-  const maxBarWidth = 100;
+  const maxBarWidth = 100; 
   const maxValue = Math.max(totalUpBytes, totalDownBytes, 1);
 
   if (doneBar) {
     doneBar.setAttribute("width", (totalUpBytes / maxValue) * maxBarWidth);
-    doneBar.style.fill = "#09600c";
+    doneBar.style.fill = "#09600c"; 
   }
 
   if (receivedBar) {
     receivedBar.setAttribute("width", (totalDownBytes / maxValue) * maxBarWidth);
-    receivedBar.style.fill = "#09600c";
+    receivedBar.style.fill = "#09600c"; 
   }
 }
 
@@ -73,10 +73,12 @@ async function loadAuditChart() {
   const colors = ["#e74c3c", "#09600c"];
   const labels = ["Failed", "Valid"];
 
-const svg = document.getElementById("auditChart");
-  svg.innerHTML = "";
-  svg.setAttribute("viewBox", "0 0 220 220");
-  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+  const svg = document.getElementById("auditChart");
+  svg.innerHTML = ""; 
+  const width = 220;
+  const height = 220;
+  const radius = 100;
+  const center = { x: width / 2, y: height / 2 };
 
   if (total === 0) {
     svg.innerHTML = `
