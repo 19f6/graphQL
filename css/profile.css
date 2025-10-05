@@ -153,6 +153,7 @@ body {
   align-items: center;
   flex: 1;
   min-height: 0;
+  width: 100%;
 }
 
 #skillsRadar {
@@ -177,20 +178,83 @@ body {
   border-radius: 3px;
 }
 
+/* Mobile Responsive */
 @media (max-width: 768px) {
   body {
     flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
   }
 
   .sidebar {
     width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #3b1a6f;
+    padding: 1.5rem;
+    gap: 1rem;
   }
 
-  .main {
+  .user-info {
+    padding: 1.5rem;
+    font-size: 1rem;
+  }
+
+  .level-card {
     padding: 1.5rem;
   }
 
-  .audit-section {
+  .level-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  #levelChart {
+    height: 200px;
+  }
+
+  #logout {
+    padding: 1rem;
+    font-size: 1rem;
+    margin-top: 0;
+  }
+
+  .main {
+    height: auto;
+    min-height: calc(100vh - 400px);
+    padding: 1.5rem;
+    display: flex;
     flex-direction: column;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 1.5rem;
+    min-height: 400px;
+  }
+
+  .card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .audit-section {
+    gap: 1.5rem;
+  }
+
+  #auditRatioChart,
+  .audit-wrapper {
+    min-height: 300px;
+    max-width: 100%;
+  }
+
+  #skills-container {
+    min-height: 350px;
+  }
+
+  #skillsRadar {
+    max-width: 100%;
   }
 }
