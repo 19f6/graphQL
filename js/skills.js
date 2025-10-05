@@ -1,5 +1,4 @@
 async function loadSkills() {
-
   try {
     const data = await fetchGraphQL(QUERIES.USER_SKILLS);
     renderSkillsRadar(data);
@@ -20,59 +19,73 @@ function renderSkillsRadar(data) {
     { label: "Back-End", value: skillsData.skills_backend[0]?.amount || 0 }
   ];
 
-  const svg = document.querySelector("#skillsRadar");
-  const plotGroup = svg.querySelector(".skills-plot");
-  const labelsGroup = svg.querySelector(".labels");
-  const gridGroup = svg.querySelector(".grid-lines");
 
-  plotGroup.innerHTML = "";
-  labelsGroup.innerHTML = "";
-  gridGroup.innerHTML = "";
+  const container = document.querySelector("#skillsRadar");
+  container.innerHTML = "";
 
-  const radius = 150;
-  const levels = 5;
-  const angleSlice = (Math.PI * 2) / skills.length;
+  const options = {
+    chart: {
+      type: "radar",
+      height: 400
+    },
+    series: [{
+      name: "Skill Level",
+      data: skills.map(s => s.value)
+    }],
+    labels: skills.map(s => s.label),
+    plotOptions: {
+      radar: {
+        size: 140,
+        polygons: {
+          strokeColors: '#4c2a7f',
+          connectorColors: '#4c2a7f',
+          fill: {
+            colors: ['#2d1b4e', '#1a0b2e']
+          }
+        }
+      }
+    },
+    colors: ["#a855f7"], // limegreen-like
+    fill: {
+      opacity: 0.4
+    },
+    markers: {
+      size: 4,
+      colors: ["#1a0b2e"],
+      strokeColors: "#c084fc",
+      strokeWidth: 2
+    },
+    stroke: {
+      width: 2,
+      colors: ['#a855f7']
+    },
+    xaxis: {
+      labels: {
+        style: {
+          colors: ['#d8b4fe', '#d8b4fe', '#d8b4fe', '#d8b4fe', '#d8b4fe', '#d8b4fe'],
+          fontSize: '12px'
+        }
+      }
+    },
+    yaxis: {
+      max: 100,
+      min: 0,
+      tickAmount: 5,
+      labels: {
+        formatter: val => `${val}%`,
+        style: {
+          colors: '#d8b4fe'
+        }
+      }
+    },
+    tooltip: {
+      theme: 'dark'
+    }
 
+  };
 
-  gridGroup.innerHTML = Array.from({ length: levels }, (_, i) => {
-    const r = (radius / levels) * (i + 1);
-    const points = skills.map((_, idx) => {
-      const angle = idx * angleSlice - Math.PI / 2;
-      return `${r * Math.cos(angle)},${r * Math.sin(angle)}`;
-    });
-    return `<path d="M${points.join(" L")} Z" stroke="rgba(255,255,255,0.2)" fill="none"></path>`;
-  }).join("");
-
-
-  const valuePoints = skills.map((s, idx) => {
-    const angle = idx * angleSlice - Math.PI / 2;
-    const r = (s.value / 100) * radius;
-    return `${r * Math.cos(angle)},${r * Math.sin(angle)}`;
-  });
-
-  plotGroup.innerHTML = `
-    <path d="M${valuePoints.join(" L")} Z" 
-          stroke="limegreen" 
-          fill="rgba(0,255,0,0.2)" 
-          stroke-width="2"></path>
-    ${valuePoints.map(p => {
-      const [x, y] = p.split(",");
-      return `<circle cx="${x}" cy="${y}" r="4" fill="black" stroke="white"></circle>`;
-    }).join("")}
-  `;
-
-
-  labelsGroup.innerHTML = skills.map((s, idx) => {
-    const angle = idx * angleSlice - Math.PI / 2;
-    const labelX = (radius + 25) * Math.cos(angle);
-    const labelY = (radius + 25) * Math.sin(angle);
-    return `<text x="${labelX}" y="${labelY}" 
-                  text-anchor="middle" 
-                  dominant-baseline="middle" 
-                  fill="white" font-size="12px">
-              ${s.label} ${s.value}%
-            </text>`;
-  }).join("");
+  const chart = new ApexCharts(container, options);
+  chart.render();
 }
 
 document.addEventListener("DOMContentLoaded", loadSkills);

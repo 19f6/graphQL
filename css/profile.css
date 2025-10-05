@@ -1,307 +1,196 @@
-body {
+* {
   margin: 0;
-  font-family: Arial, sans-serif;
-  display: flex;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #0a0118;
   height: 100vh;
+  display: flex;
+  color: #e9d5ff;
   overflow: hidden;
-  background: #000;
-  color: #e0ffe0;
 }
 
 .sidebar {
-  width: 250px;
-  background: #111;
-  padding: 20px;
-  box-shadow: 0 0 15px rgba(0,255,0,0.3);
+  width: 280px;
+  background: #1a0b2e;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  border-radius: 12px;
-  margin: 20px;
-  height: 85%;
+  gap: 0.75rem;
+  border-right: 1px solid #3b1a6f;
+  overflow-y: auto;
+  height: 100vh;
 }
 
 .user-info {
+  background: #2d1b4e;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #4c2a7f;
+  color: #f3e8ff;
+  flex-shrink: 0;
+  font-size: 0.9rem;
   text-align: center;
 }
 
-.user-info h3 {
-  margin: 10px 0 5px;
-  color: #057f18;
+.level-card {
+  background: #2d1b4e;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #4c2a7f;
+  flex-shrink: 0;
+  text-align: center;
 }
 
-.level-card {
-  margin-top: 20px;
-  background: #111;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.level-card h3 {
+  color: #d8b4fe;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+#levelChart {
+  height: 160px;
 }
 
 #logout {
-  margin-top: auto;
-  padding: 10px;
-  background: #057f18;
-  color: #000;
+  background: #7c3aed;
+  color: white;
   border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: 0.3s;
+  transition: background 0.2s;
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 #logout:hover {
-  background: #00cc00;
+  background: #6d28d9;
 }
 
 .main {
   flex: 1;
+  padding: 1rem;
   display: grid;
-  grid-template-columns: 1fr 1fr; 
-  gap: 20px;
-  padding: 20px;
-  background: #0a0a0a;
-  box-sizing: border-box;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
   overflow-y: auto;
+  background: linear-gradient(to bottom right, #0a0118, #1a0b2e);
+  height: 100vh;
 }
 
 .card {
-  background: #111;
+  background: #1a0b2e;
   border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 0 15px rgba(0,255,0,0.3);
+  padding: 1.25rem;
+  border: 1px solid #3b1a6f;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 250px;
 }
 
 .card h3 {
-  margin-bottom: 10px;
-  color: #057f18;
+  color: #d8b4fe;
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
   text-align: center;
-  font-size: 16px;
-  border-bottom: 1px solid rgba(0,255,0,0.3);
-  padding-bottom: 5px;
   width: 100%;
 }
 
-.level-wrapper svg {
-  width: 120px;
-  height: 120px;
-}
-
-.level-text {
-  color: #057f18;
-}
-
 .audit-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  max-height: none;
 }
 
 .audit-section {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  gap: 20px;
-}
-
-.audit-ratio-wrapper {
+  gap: 1rem;
   flex: 1;
-}
-
-.audit-stats {
-  margin-top: 20%;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  color: #057f18;
-}
-
-.stat-label {
-  font-weight: bold;
-  font-size: 14px;
-  color: #057f18;
-}
-
-.stat-value {
-  font-size: 12px;
-  color: #e0ffe0;
-}
-
-.bar-chart {
-  background: #222;
-  border-radius: 10px;
-  width: 150px;
-  height: 16px;
-}
-
-
-@media (max-width: 480px) {
-  .bar-chart {
-    width: 100%;
-    max-width: 280px;
-  }
-}
-
-.audit-ratio-display {
-  display: flex;
-  justify-content: space-between;
+  min-height: 0;
+  overflow: hidden;
+  width: 100%;
   align-items: center;
-  padding: 8px;
-  background: #222;
-  border-radius: 8px;
-  margin-top: 10px;
 }
 
-.ratio-label {
-  font-weight: bold;
-  color: #057f18;
-}
-
-.ratio-value {
-  font-size: 16px;
-  font-weight: bold;
-  color: #00cc00;
+#auditRatioChart {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  max-width: 600px;
 }
 
 .audit-wrapper {
   flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  max-width: 600px;
 }
 
 #auditChart {
-  width: 100%;
-  aspect-ratio: 1/1;
-  max-width: 220px;
-  height: auto;
+  height: 100%;
 }
 
-
 .skills-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  max-height: none;
 }
 
 #skills-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 #skillsRadar {
   width: 100%;
-  aspect-ratio: 1/1;
-  max-width: 400px;
-  height: auto;
+  max-width: 500px;
+  height: 100%;
 }
 
-
-@media (max-width: 900px) {
-  .main {
-    grid-template-columns: 1fr;
-  }
-
-  .audit-section {
-    flex-direction: column;
-  }
+.sidebar::-webkit-scrollbar,
+.main::-webkit-scrollbar {
+  width: 6px;
 }
 
+.sidebar::-webkit-scrollbar-track,
+.main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.main::-webkit-scrollbar-thumb {
+  background: #4c2a7f;
+  border-radius: 3px;
+}
 
 @media (max-width: 768px) {
-  .sidebar {
-    width: 200px;
-    margin: 10px;
-    height: auto;
-  }
-  .card {
-    padding: 12px;
-  }
-}
-
-
-@media (max-width: 480px) {
   body {
     flex-direction: column;
-    height: auto;
-    overflow-y: auto;
   }
 
   .sidebar {
     width: 100%;
-    margin: 10px 0;
-    height: auto;
-    flex-direction: row; 
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-  }
-
-  .user-info h3 {
-    font-size: 14px;
-  }
-
-  .level-card {
-    margin-top: 0;
-    padding: 10px;
-  }
-
-  #logout {
-    position: static;
-    transform: none;
-    width: auto;
-    max-width: none;
-    margin: 0;
-    border-radius: 8px;
   }
 
   .main {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 8px;
-  }
-
-  .card {
-    padding: 8px;
-    min-height: auto;
-  }
-
-  .card h3 {
-    font-size: 13px;
+    padding: 1.5rem;
   }
 
   .audit-section {
     flex-direction: column;
-    gap: 10px;
-  }
-
-  .audit-stats {
-    margin-top: 10px;
-    gap: 8px;
-    font-size: 12px;
-  }
-
-  .stat-label {
-    font-size: 12px;
-  }
-
-  .stat-value {
-    font-size: 11px;
-  }
-
-  .ratio-value {
-    font-size: 14px;
   }
 }

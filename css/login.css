@@ -3,14 +3,16 @@
     padding: 0;
     box-sizing: border-box;
 }
-:root{
-      --background: #000000;
-        }
+
+:root {
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 100vh;
     overflow: hidden;
-    cursor: pointer;
 }
 
 .background {
@@ -19,23 +21,51 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--background);
+    background: linear-gradient(135deg, #1a0b2e 0%, #0a0118 100%);
     z-index: -1;
+    overflow: hidden;
 }
 
 .background::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('./background.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    clip-path: circle(0px at 50% 50%);
-    transition: clip-path 0.3s ease;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    left: var(--mouse-x);
+    top: var(--mouse-y);
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease-out;
+    pointer-events: none;
+    filter: blur(40px);
+}
+
+.background::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(192, 132, 252, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    left: var(--mouse-x);
+    top: var(--mouse-y);
+    transform: translate(-50%, -50%) scale(1.5);
+    transition: all 0.2s ease-out;
+    pointer-events: none;
+    filter: blur(60px);
+}
+
+.background.active::before {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, transparent 70%);
+}
+
+.background.active::after {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(192, 132, 252, 0.4) 0%, transparent 70%);
 }
 
 .container {
@@ -47,20 +77,23 @@ body {
 }
 
 .login-box {
-   background: transparent; /* changed from rgba */
-    /* border: 1px solid rgba(255, 255, 255, 0.3); optional subtle border */
-    /* backdrop-filter: blur(10px); keeps blur effect for contrast */
+    background: rgba(45, 27, 78, 0.6);
+    backdrop-filter: blur(20px);
     padding: 40px;
     width: 100%;
     max-width: 400px;
     border-radius: 20px;
-    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 
+                0 0 80px rgba(168, 85, 247, 0.2);
     transition: all 0.3s ease;
 }
 
 .login-box:hover {
     transform: translateY(-5px);
-    box-shadow: 0 35px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 35px 60px rgba(0, 0, 0, 0.5),
+                0 0 100px rgba(168, 85, 247, 0.3);
+    border-color: rgba(192, 132, 252, 0.5);
 }
 
 .login-header {
@@ -69,14 +102,15 @@ body {
 }
 
 .login-header h2 {
-    color: #8a8a8a;
+    color: #e9d5ff;
     font-size: 28px;
     font-weight: 600;
     margin-bottom: 8px;
+    text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
 }
 
 .login-header p {
-    color: #c6c4c4;
+    color: #d8b4fe;
     font-size: 14px;
 }
 
@@ -92,7 +126,7 @@ body {
 .input-group label {
     display: block;
     margin-bottom: 8px;
-    color: #8a8a8a;
+    color: #d8b4fe;
     font-weight: 500;
     font-size: 14px;
 }
@@ -100,19 +134,26 @@ body {
 .input-group input {
     width: 100%;
     padding: 12px 16px;
-    border: 2px solid #e1e1e1;
+    border: 2px solid rgba(168, 85, 247, 0.3);
     border-radius: 10px;
     font-size: 16px;
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(26, 11, 46, 0.6);
+    color: #e9d5ff;
+}
+
+.input-group input::placeholder {
+    color: #a78bfa;
+    opacity: 0.6;
 }
 
 .input-group input:focus {
     outline: none;
-    border-color: #09600c;
-    background: rgba(255, 255, 255, 1);
+    border-color: #a855f7;
+    background: rgba(26, 11, 46, 0.8);
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2);
+    box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3),
+                0 0 30px rgba(168, 85, 247, 0.2);
 }
 
 .form-options {
@@ -127,7 +168,7 @@ body {
     display: flex;
     align-items: center;
     cursor: pointer;
-    color: #333;
+    color: #d8b4fe;
 }
 
 .checkbox-container input {
@@ -135,7 +176,7 @@ body {
 }
 
 .login-btn {
-    background: linear-gradient(135deg, #03722f, #057f18);
+    background: linear-gradient(135deg, #a855f7, #7c3aed);
     color: white;
     border: none;
     padding: 14px 20px;
@@ -147,27 +188,38 @@ body {
     margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
 }
 
 .login-btn:hover {
-    background: linear-gradient(135deg, #03722f, #035810);
+    background: linear-gradient(135deg, #9333ea, #6d28d9);
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
+    box-shadow: 0 10px 25px rgba(168, 85, 247, 0.6),
+                0 0 40px rgba(168, 85, 247, 0.3);
 }
 
 .login-btn:active {
     transform: translateY(0);
-    box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 5px 15px rgba(168, 85, 247, 0.4);
 }
 
 .signup-link {
     text-align: center;
-    color: #666;
+    color: #d8b4fe;
     font-size: 14px;
 }
 
+.signup-link a {
+    color: #c084fc;
+    text-decoration: none;
+    font-weight: 600;
+}
 
-/* Responsive Design */
+.signup-link a:hover {
+    color: #e9d5ff;
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
 @media (max-width: 480px) {
     .login-box {
         padding: 30px 20px;
@@ -187,19 +239,10 @@ body {
     }
 }
 
-/* Hover effect animations */
-.background.active::before {
-    clip-path: circle(150px at var(--mouse-x, 50%) var(--mouse-y, 50%));
-}
-
-@keyframes fadeInBackground {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-#error-message{
-    color: white;
+#error-message {
+    color: #fca5a5;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    text-shadow: 0 0 10px rgba(252, 165, 165, 0.3);
 }

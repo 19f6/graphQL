@@ -39,19 +39,61 @@ function displayAuditRatio(userData) {
   if (receivedEl) receivedEl.textContent = formatBytes(totalDownBytes);
   if (ratioEl) ratioEl.textContent = auditRatio.toFixed(1);
 
-  const doneBar = document.getElementById("audits-done-bar");
-  const receivedBar = document.getElementById("audits-received-bar");
-  const maxBarWidth = 100; 
-  const maxValue = Math.max(totalUpBytes, totalDownBytes, 1);
+  const options = {
+    chart: {
+      type: 'bar',
+      background: 'transparent',
+      foreColor: '#d8b4fe'
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        borderRadius: 6
+      }
+    },
+    series: [{
+      name: "Bytes",
+      data: [
+        { x: 'Audits Done', y: totalUpBytes },
+        { x: 'Audits Received', y: totalDownBytes }
+      ]
+    }],
+    colors: ['#a855f7', '#7c3aed'],
+    dataLabels: {
+      enabled: true,
+      formatter: (val) => formatBytes(val),
+      style: {
+        colors: ['#f3e8ff']
+      }
+    },
+    xaxis: {
+      labels: {
+        formatter: (val) => formatBytes(val),
+        style: {
+          colors: '#d8b4fe'
+        }
+      }
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: '#d8b4fe'
+        }
+      }
+    },
+    grid: {
+      borderColor: '#3b1a6f'
+    },
+    tooltip: {
+      theme: 'dark'
+    }
+  };
 
-  if (doneBar) {
-    doneBar.setAttribute("width", (totalUpBytes / maxValue) * maxBarWidth);
-    doneBar.style.fill = "#09600c"; 
-  }
-
-  if (receivedBar) {
-    receivedBar.setAttribute("width", (totalDownBytes / maxValue) * maxBarWidth);
-    receivedBar.style.fill = "#09600c"; 
+  const chartContainer = document.querySelector("#auditRatioChart");
+  if (chartContainer) {
+    chartContainer.innerHTML = "";
+    const chart = new ApexCharts(chartContainer, options);
+    chart.render();
   }
 }
 
@@ -61,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadAuditRatioData();
   loadAuditChart()
 });
+
 async function loadAuditChart() {
   const response = await fetchGraphQL(QUERIES.AUDIT_CHART);
   const user = response.data.user[0];
@@ -69,97 +112,69 @@ async function loadAuditChart() {
   const validCount = user.validAudits.aggregate.count;
   const total = failedCount + validCount;
 
-  const values = [failedCount, validCount];
-  const colors = ["#e74c3c", "#09600c"];
-  const labels = ["Failed", "Valid"];
-
-  const svg = document.getElementById("auditChart");
-  svg.innerHTML = ""; 
-  const width = 220;
-  const height = 220;
-  const radius = 100;
-  const center = { x: width / 2, y: height / 2 };
-
   if (total === 0) {
-    svg.innerHTML = `
-      <text 
-        x="${center.x}" 
-        y="${center.y}" 
-        fill="#666" 
-        font-size="16px" 
-        text-anchor="middle" 
-        dominant-baseline="middle">
+    document.getElementById("auditChart").innerHTML = `
+      <p style="text-align:center; color:#d8b4fe; font-size:16px;">
         No audit data
-      </text>
-    `;
+      </p>`;
     return;
   }
 
-  let startAngle = 0;
-  let markup = "";
-
-  values.forEach((value, i) => {
-    if (value === 0) return;
-
-    const sliceAngle = (value / total) * 2 * Math.PI;
-
-    if (sliceAngle >= 2 * Math.PI - 0.001) {
-      markup += `
-        <circle 
-          cx="${center.x}" 
-          cy="${center.y}" 
-          r="${radius}" 
-          fill="${colors[i]}"></circle>
-        <text 
-          x="${center.x}" 
-          y="${center.y}" 
-          fill="#fff" 
-          font-size="16px" 
-          text-anchor="middle" 
-          dominant-baseline="middle">
-          ${labels[i]} (${value})
-        </text>
-      `;
-    } else {
-      const endAngle = startAngle + sliceAngle;
-
-      const x1 = center.x + radius * Math.cos(startAngle);
-      const y1 = center.y + radius * Math.sin(startAngle);
-      const x2 = center.x + radius * Math.cos(endAngle);
-      const y2 = center.y + radius * Math.sin(endAngle);
-
-      const largeArcFlag = sliceAngle > Math.PI ? 1 : 0;
-
-      const pathData = `
-        M ${center.x},${center.y}
-        L ${x1},${y1}
-        A ${radius},${radius} 0 ${largeArcFlag} 1 ${x2},${y2}
-        Z
-      `;
-
-      markup += `
-        <path d="${pathData}" fill="${colors[i]}"></path>
-      `;
-
-      const midAngle = startAngle + sliceAngle / 2;
-      const labelX = center.x + (radius / 1.5) * Math.cos(midAngle);
-      const labelY = center.y + (radius / 1.5) * Math.sin(midAngle);
-
-      markup += `
-        <text 
-          x="${labelX}" 
-          y="${labelY}" 
-          fill="#fff" 
-          font-size="16px" 
-          text-anchor="middle" 
-          dominant-baseline="middle">
-          ${labels[i]} (${value})
-        </text>
-      `;
-
-      startAngle = endAngle;
+  const options = {
+    chart: {
+      type: 'bar',
+      background: 'transparent',
+      foreColor: '#d8b4fe'
+    },
+    plotOptions: {
+      bar: {
+        vertical: true,
+        distributed: true,
+        borderRadius: 6
+      }
+    },
+    series: [{
+      data: [
+        { x: 'Failed', y: failedCount },
+        { x: 'Passed', y: validCount }
+      ]
+    }],
+    colors: ['#ec4899', '#a855f7'],
+    dataLabels: {
+      enabled: true,
+      style: {
+        colors: ['#f3e8ff']
+      }
+    },
+    xaxis: {
+      title: {
+        text: 'Audits Count',
+        style: {
+          color: '#d8b4fe'
+        }
+      },
+      labels: {
+        style: {
+          colors: '#d8b4fe'
+        }
+      }
+    },
+    yaxis: {
+      labels: {
+        style: {
+          fontSize: '14px',
+          colors: '#d8b4fe'
+        }
+      }
+    },
+    grid: {
+      borderColor: '#3b1a6f'
+    },
+    tooltip: {
+      theme: 'dark'
     }
-  });
+  };
 
-  svg.innerHTML = markup;
+  const chart = new ApexCharts(document.querySelector("#auditChart"), options);
+  chart.render();
 }
